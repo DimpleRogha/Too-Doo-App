@@ -49,14 +49,18 @@ export default function App() {
   // Flat List will give you input you don't need to additionally anything !
   const renderTask = ({ item }) => {
     return (
-      <View>
-        <View key={item.id}>
-          <Pressable onPress={() => makeTaskComplete(item.id)}>
-            <Text>
-              {item.name} Task Completed: {item.isCompleted.toString()}
-            </Text>
-          </Pressable>
-        </View>
+      <View 
+      key={item.id}>
+        <Pressable 
+        onPress={() => makeTaskComplete(item.id)}
+        style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <View style={{ flexShrink: 1, flexGrow: 1, marginRight: 30 }}>
+            <Text>{item.name}</Text>
+          </View>
+          <View style={{ flexShrink: 1, flexGrow: 1 }}>
+            <Text>Task Complete: {item.isCompleted.toString()}</Text>
+          </View>
+        </Pressable>
       </View>
     );
   };
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
-    paddingTop: 40
+    paddingTop: 40,
   },
 
   heading: {
@@ -115,6 +119,21 @@ const styles = StyleSheet.create({
 
   list: {
     padding:30,
+    flexDirection: 'row',
+
   },
+
+  listText : {
+    fontSize: 16,
+  },
+
+  listItems: {
+    display: 'flex', 
+    width: '100%',
+    height: 'auto',
+    flexDirection: 'row', 
+    borderWidth: 1,
+    justifyContent: 'center'
+  }
 
 });
