@@ -1,4 +1,5 @@
 import { StatusBar } from "expo-status-bar";
+import { Checkbox } from "react-native-paper";
 import { useState } from "react";
 import {
   FlatList,
@@ -7,13 +8,17 @@ import {
   Text,
   TextInput,
   View,
+  Image
 } from "react-native";
+import icon from './assets/iconn.jpg';
+import add_icon from './assets/add_icon.jpg';
 
 import { Ionicons } from "@expo/vector-icons";
 
 export default function App() {
   const [userInput, setUserInput] = useState("");
   const [task, setTask] = useState([]);
+  const [isSelected, setSelection] = useState(false)
 
   const addTask = () => {
     ///[x,y,z] -> x , y , z + userInput => [x,y,z,userInput]
@@ -47,28 +52,54 @@ export default function App() {
   };
 
   // Flat List will give you input you don't need to additionally anything !
-  const renderTask = ({ item }) => {
-    return (
-      <View 
-      key={item.id}>
-        <Pressable 
-        onPress={() => makeTaskComplete(item.id)}
-        style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flexShrink: 1, flexGrow: 1, marginRight: 30 }}>
-            <Text>{item.name}</Text>
-          </View>
-          <View style={{ flexShrink: 1, flexGrow: 1 }}>
-            <Text>Task Complete: {item.isCompleted.toString()}</Text>
-          </View>
-        </Pressable>
-      </View>
-    );
-  };
+  const renderTask = ({ item }) => (
+  <View style={{ flexDirection: 'row', alignItems: 'Center', padding: 5 }}>
+    <Checkbox
+      status={item.isCompleted ? 'checked' : 'unchecked'}
+      onPress={() => makeTaskComplete(item.id)}
+    />
+    <Text
+      style={{
+        textDecorationLine: item.isCompleted ? 'line-through' : 'none',
+        marginLeft: 10,
+      }}
+    >
+      {item.name}
+    </Text>
+  </View>
+  );
+
+  const addLine = () => {
+    return(
+      <View
+      style={{
+      borderBottomColor: 'gray',
+      borderBottomWidth: 1,
+      marginVertical: 10
+      }} />
+    )
+  }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Todo APP</Text>
-      <View style={{ flexDirection: "row", gap: 5 }}>
+      <View style={styles.heading}>
+        console.log(require('./assests/iconn.jpg'))
+        <Image 
+        source={icon}
+        style={{width:40, height:40 }}
+        resizeMode="contain" />
+        <Text style={styles.headingText}>Todo APP</Text>
+      </View>
+
+      <FlatList
+        style={styles.list}
+        data={task}
+        renderItem={renderTask}
+      />
+
+      {addLine()}
+
+      <View style={{ flexDirection: "row", gap:5, marginBottom: 20 }}>
         <TextInput
           value={userInput}
           onChangeText={setUserInput}
@@ -78,16 +109,15 @@ export default function App() {
 
         <Pressable onPress={addTask}>
           <View style={{ flexDirection: "row", alignContent: "center" }}>
-            <Ionicons name="add"></Ionicons>
+            <Image 
+            source={add_icon}
+            style={{width:30, height:30 }}
+            resizeMode="contain" />
           </View>
         </Pressable>
       </View>
       {/* {task && task.map((taskObj) => <Text>{taskObj.name}</Text>)} */}
-      <FlatList
-        style={styles.list}
-        data={task}
-        renderItem={renderTask}
-      />
+
 
     </View>
   );
@@ -97,43 +127,41 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    alignItems: "center",
+    alignItems: "left",
     justifyContent: "center",
     paddingTop: 40,
+
   },
 
   heading: {
+    marginBottom: 30,
+    marginTop: 0,
+    backgroundColor: 'black',
+    width: '100%',
+    padding: 10,
+    flexDirection: 'row',
+  },
+
+  headingText: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 30,
-    marginTop: 20,
-    backgroundColor: 'lightblue',
-    width: '100%',
-    padding: 10
+    marginLeft: 15,
+    color:'white',
   },
 
   input: {
     borderWidth: 1,
-    borderColor: 'gray'
+    borderColor: 'gray',
+    marginBottom: 30,
+    marginLeft: '4%',
+    width: '85%'
   },
 
   list: {
-    padding:30,
+    padding:20,
     flexDirection: 'row',
 
-  },
-
-  listText : {
-    fontSize: 16,
-  },
-
-  listItems: {
-    display: 'flex', 
-    width: '100%',
-    height: 'auto',
-    flexDirection: 'row', 
-    borderWidth: 1,
-    justifyContent: 'center'
   }
+
 
 });
